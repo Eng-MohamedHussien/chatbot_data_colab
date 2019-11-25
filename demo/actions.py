@@ -6,31 +6,31 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from typing import Dict, Text, Any, List, Union
 
-from rasa_core_sdk import ActionExecutionRejection
-from rasa_core_sdk import Tracker
-from rasa_core_sdk.events import SlotSet
-from rasa_core_sdk.executor import CollectingDispatcher
-from rasa_core_sdk.forms import FormAction, REQUESTED_SLOT
+from rasa_sdk import ActionExecutionRejection
+from rasa_sdk import Tracker
+from rasa_sdk.events import SlotSet
+from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.forms import FormAction, REQUESTED_SLOT
 
 import logging
 import requests
 import json
 import random
-from rasa_core_sdk import Action
-from rasa_core.policies.fallback import FallbackPolicy
-from rasa_core.policies.keras_policy import KerasPolicy
-from rasa_core.agent import Agent
+from rasa_sdk import Action
+from rasa.core.policies.fallback import FallbackPolicy
+from rasa.core.policies.keras_policy import KerasPolicy
+from rasa.core.agent import Agent
 
-from rasa_core.events import AllSlotsReset
-from rasa_core.events import Restarted
+from rasa.core.events import AllSlotsReset
+from rasa.core.events import Restarted
 from random import randint
 import re
 import pandas as pd
-from rasa_core_sdk.events import UserUtteranceReverted
+from rasa_sdk.events import UserUtteranceReverted
 
 
-from rasa_core_sdk.events import FollowupAction
-from rasa_core_sdk.events import ConversationPaused
+from rasa_sdk.events import FollowupAction
+from rasa_sdk.events import ConversationPaused
 
 #rasa_core.trackers
 
