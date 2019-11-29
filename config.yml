@@ -1,18 +1,14 @@
-language: "en"
+# Configuration for Rasa NLU.
+language: en
+pipeline: 
+  - name: "pretrained_embeddings_convert"
 
-pipeline:
-- name: "nlp_spacy"
-- name: "tokenizer_spacy"
-- name: "intent_entity_featurizer_regex"
-- name: "intent_featurizer_spacy"
-- name: "ner_synonyms"
-- name: "intent_classifier_sklearn"
-- name: "ner_crf"
 
+# Configuration for Rasa Core.
 policies:
   - name: "FallbackPolicy"
-    nlu_threshold: 0.23
-    core_threshold: 0.23
+    nlu_threshold: 0.25
+    core_threshold: 0.25
     fallback_action_name: "action_fallback"
 
   - name: KerasPolicy
@@ -21,4 +17,5 @@ policies:
   - name: MemoizationPolicy
     max_history: 3
 
+  - name: MappingPolicy
   - name: "FormPolicy"

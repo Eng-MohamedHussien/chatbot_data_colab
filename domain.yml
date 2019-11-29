@@ -37,7 +37,6 @@ actions:
 - utter_thanks
 - utter_wrong_account_id
 - utter_transferMoney_values
-- utter_name
 - utter_wrong_age
 - utter_ask_feedback
 - action_transfer
@@ -53,8 +52,6 @@ actions:
 - utter_agent.bad
 - utter_agent.be_clever
 - utter_agent.beautiful
-- utter_agent.birth_date
-- utter_agent.boring
 - utter_agent.boss
 - utter_agent.busy
 - utter_agent.can_you_help
@@ -65,15 +62,12 @@ actions:
 - utter_agent.funny
 - utter_agent.good
 - utter_agent.happy
-- utter_agent.hobby
 - utter_agent.hungry
-- utter_agent.marry_user
 - utter_agent.my_friend
 - utter_agent.occupation
 - utter_agent.origin
 - utter_agent.ready
 - utter_agent.real
-- utter_agent.residence
 - utter_agent.right
 - utter_agent.sure
 - utter_agent.talk_to_me
@@ -88,7 +82,6 @@ actions:
 - utter_dialog.hug
 - utter_dialog.i_do_not_care
 - utter_dialog.sorry
-- utter_dialog.what_do_you_mean
 - utter_dialog.wrong
 - utter_emotions.ha_ha
 - utter_emotions.wow
@@ -105,7 +98,6 @@ actions:
 - utter_greetings.whatsup
 - utter_user.angry
 - utter_user.back
-- utter_user.bored
 - utter_user.busy
 - utter_user.can_not_sleep
 - utter_user.does_not_want_to_talk
@@ -113,7 +105,6 @@ actions:
 - utter_user.going_to_bed
 - utter_user.good
 - utter_user.happy
-- utter_user.has_birthday
 - utter_user.here
 - utter_user.joking
 - utter_user.likes_agent
@@ -123,7 +114,6 @@ actions:
 - utter_user.misses_agent
 - utter_user.needs_advice
 - utter_user.sad
-- utter_user.sleepy
 - utter_user.testing_agent
 - utter_user.tired
 - utter_user.waits
@@ -135,6 +125,10 @@ actions:
 - utter_confirmation.no
 - utter_live_agent
 - action_fallback_reset
+- utter_user.ask.about.account_id
+- action_check_OTP
+- utter_ask_OTP
+- action_fallback_OTP
 
 entities:
 - profession
@@ -148,11 +142,13 @@ entities:
 - mobileNumber
 - transfer_to_id
 - general_account_id
+- OTP
 
 forms:
 - check_balance_form
 - transferMoney_form
 - account_form
+- check_OTP_form
 
 intents:
 - profession
@@ -194,7 +190,6 @@ intents:
 - whatsup
 - angry
 - back
-- bored
 - happy
 - advice
 - user_waiting
@@ -211,8 +206,6 @@ intents:
 - agent.bad
 - agent.be_clever
 - agent.beautiful
-- agent.birth_date
-- agent.boring
 - agent.boss
 - agent.busy
 - agent.can_you_help
@@ -223,15 +216,12 @@ intents:
 - agent.funny
 - agent.good
 - agent.happy
-- agent.hobby
 - agent.hungry
-- agent.marry_user
 - agent.my_friend
 - agent.occupation
 - agent.origin
 - agent.ready
 - agent.real
-- agent.residence
 - agent.right
 - agent.sure
 - agent.talk_to_me
@@ -247,7 +237,6 @@ intents:
 - dialog.hug
 - dialog.i_do_not_care
 - dialog.sorry
-- dialog.what_do_you_mean
 - dialog.wrong
 - emotions.ha_ha
 - emotions.wow
@@ -264,7 +253,6 @@ intents:
 - greetings.whatsup
 - user.angry
 - user.back
-- user.bored
 - user.busy
 - user.can_not_sleep
 - user.does_not_want_to_talk
@@ -272,7 +260,6 @@ intents:
 - user.going_to_bed
 - user.good
 - user.happy
-- user.has_birthday
 - user.here
 - user.joking
 - user.likes_agent
@@ -282,7 +269,6 @@ intents:
 - user.misses_agent
 - user.needs_advice
 - user.sad
-- user.sleepy
 - user.testing_agent
 - user.tired
 - user.waits
@@ -294,6 +280,8 @@ intents:
 - confirmation.no
 - live_agent
 - general_account_id
+- user.ask.about.account_id
+- inform_OTP
 
 slots:
   general_account_id:
@@ -330,6 +318,9 @@ slots:
     auto_fill: false
     type: unfeaturized
   transfer_to_id:
+    auto_fill: false
+    type: unfeaturized
+  OTP:
     auto_fill: false
     type: unfeaturized
 
@@ -464,9 +455,9 @@ templates:
   utter_well_done:
   - text: Thanks, Feedback please.
   utter_wrong_accountType:
-  - text: Account type is not in the database, please try again
+  - text: Account type is not in the database, please try again.
   utter_wrong_account_id:
-  - text: 'Account number is not valid, please try input a valid account number again. '
+  - text: 'Account number is not valid, please try input a valid account number again with 16-digit number. '
   utter_wrong_age:
   - text: age is not valid or not allowed, please try input a valid age again.
   utter_wrong_amount_transfer:
@@ -529,16 +520,6 @@ templates:
   - text: "Aww, back at you."
   - text: "Aww. You smooth talker, you."
 
-  utter_agent.birth_date:
-  - text: "Wait, are you planning a party for me? It's today! My birthday is today!"
-  - text: "I'm young. I'm not sure of my birth date."
-  - text: "I don't know my birth date. Most virtual agents are young, though, like me."
-
-  utter_agent.boring:
-  - text: "I'm sorry. I'll request to be made more charming."
-  - text: "I don't mean to be. I'll ask my developers to work on making me more amusing."
-  - text: "I can let my developers know so they can make me fun."
-
   utter_agent.boss:
   - text: "My developer has authority over my actions."
   - text: "I act on my developer's orders."
@@ -587,19 +568,9 @@ templates:
   - text: "I'd like to think so."
   - text: "Happiness is relative."
 
-  utter_agent.hobby:
-  - text: "Hobby? I have quite a few. Too many to list."
-  - text: "Too many hobbies."
-  - text: "I keep finding more new hobbies."
-
   utter_agent.hungry:
   - text: "Hungry for knowledge."
   - text: "I just had a byte. Ha ha. Get it? b-y-t-e."
-
-  utter_agent.marry_user:
-  - text: "I'm afraid I'm too virtual for such a commitment."
-  - text: "In the virtual sense that I can, sure."
-  - text: "I know you can't mean that, but I'm flattered all the same."
 
   utter_agent.my_friend:
   - text: "Of course I'm your friend."
@@ -624,11 +595,6 @@ templates:
   utter_agent.real:
   - text: "I'm not a real person, but I certainly exist."
   - text: "I must have impressed you if you think I'm real. But no, I'm a virtual being."
-
-  utter_agent.residence:
-  - text: "I live in this app all day long."
-  - text: "The virtual world is my playground. I'm always here."
-  - text: "Right here in this app. Whenever you need me."
 
   utter_agent.right:
   - text: "That's my job."
@@ -695,12 +661,6 @@ templates:
   - text: "No big deal. I won't hold a grudge."
   - text: "It's cool."
   - text: "That's all right. I forgive you."
-
-  utter_dialog.what_do_you_mean:
-  - text: "Sorry if I understood you incorrectly."
-  - text: "I'm still learning. I may misinterpret things from time to time."
-  - text: "Maybe I misunderstood what you said."
-  - text: "Sorry, looks like I misunderstood what you said."
 
   utter_dialog.wrong:
   - text: "Sorry if I understood you incorrectly."
@@ -789,12 +749,6 @@ templates:
   - text: "You were missed. What can I do for you today?"
   - text: "Good to have you here. What can I do for you?"
 
-  utter_user.bored:
-  - text: "Boredom, huh? Have you ever seen a hedgehog taking a bath?"
-  - text: "What to do against boredom? Watch baby animal videos or GIFs."
-  - text: "Bored? How about 10 jumping jacks? Get your blood flowing."
-  - text: "Bored? Silly idea, but it works: Interview you feet."
-  - text: "If you're bored, you could plan your dream vacation."
 
   utter_user.busy:
   - text: "Okay. I'll let you get back to work."
@@ -832,11 +786,6 @@ templates:
   - text: "Great! Glad to hear that."
   - text: "If you're happy, then I'm happy."
   - text: "Excellent! That's what I like to see."
-
-  utter_user.has_birthday:
-  - text: "Happy Birthday. Well, this calls for a celebration."
-  - text: "Happy Birthday. All the best!"
-  - text: "Happy Birthday. And I really mean it. All the best!"
 
   utter_user.here:
   - text: "Okay, what can I help you with today?"
@@ -886,12 +835,6 @@ templates:
   - text: "Oh, don't be sad. Go do something you enjoy."
   - text: "Sad? Writing down what's troubling you may help."
   - text: "If you're feeling down, how about drawing or painting something?"
-
-  utter_user.sleepy:
-  - text: "You should get some shuteye. You'll feel refreshed."
-  - text: "Sleep is important to your health. Rest up for a bit and we can chat later."
-  - text: "Don't let me keep you up. Get some rest and we can continue this later."
-  - text: "Why not catch a little shuteye? I'll be here to chat when you wake up."
 
   utter_user.testing_agent:
   - text: "Hope I'm doing well. You're welcome to test me as often as you want."
@@ -945,3 +888,9 @@ templates:
 
   utter_live_agent:
   - text: "the conversation will be diverted to a live agent."
+
+  utter_user.ask.about.account_id:
+  - text: "The Account ID is a 16-digit number. This number is a unique identifier for your account and cannot be changed, and it cannot be carried over to a new account. "
+
+  utter_ask_OTP:
+  - text: What is the verification code (OTP).?
