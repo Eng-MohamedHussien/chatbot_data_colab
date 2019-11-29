@@ -1,6 +1,6 @@
 # Configuration for Rasa NLU.
 language: en
-pipeline: "pretrained_embeddings_spacy"
+pipeline: "supervised_embeddings"
 
 
 # Configuration for Rasa Core.
